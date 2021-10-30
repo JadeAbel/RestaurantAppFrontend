@@ -57,7 +57,11 @@ function Restaurants() {
                 <div style={{ height: 393, overflow: "hidden" }}>
                   <CardImg
                     top={true}
-                    src={`${process.env.NEXT_PUBLIC_API_URL}${res.image.url}`}
+                    src={
+                      process.env.NODE_ENV === "production"
+                        ? res.image.url
+                        : `${process.env.NEXT_PUBLIC_API_URL}${res.image.url}`
+                    }
                   />
                 </div>
                 <CardBody>
