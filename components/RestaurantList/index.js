@@ -47,7 +47,11 @@ function RestaurantList(props) {
                 <div style={{ height: 393, overflow: "hidden" }}>
                   <CardImg
                     top={true}
-                    src={`${process.env.NEXT_PUBLIC_API_URL}${res.image[0].url}`}
+                    src={
+                      process.env.NODE_ENV === "production"
+                        ? res.image[0].url
+                        : `${process.env.NEXT_PUBLIC_API_URL}${res.image[0].url}`
+                    }
                   />
                 </div>
                 <CardBody>
