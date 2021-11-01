@@ -1,5 +1,5 @@
 /* /pages/restaurants.js */
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { useRouter } from "next/router";
 import { gql } from "apollo-boost";
@@ -16,6 +16,9 @@ import {
   CardTitle,
   Col,
   Row,
+  Input,
+  InputGroup,
+  InputGroupAddon,
 } from "reactstrap";
 
 const GET_RESTAURANT_DISHES = gql`
@@ -47,11 +50,26 @@ function Restaurants() {
   if (loading) return <h1>Loading ...</h1>;
   if (data.restaurant) {
     const { restaurant } = data;
+    const [searchTerm, setSearchterm] = useState("");
+    const visibleDishes = restaurant.dishes.filter((dish) =>
+      dish.name.toLowerCase().includes(searchTerm)
+    );
     return (
       <>
         <h1>{restaurant.name}</h1>
+        <div className="search">
+          <InputGroup>
+            <InputGroupAddon addonType="append"> SEARCH </InputGroupAddon>
+            <Input
+              onChange={(e) =>
+                setSearchterm(e.target.value.toLocaleLowerCase())
+              }
+              value={searchTerm}
+            />
+          </InputGroup>
+        </div>
         <Row>
-          {restaurant.dishes.map((res) => (
+          {visibleDishes.map((res) => (
             <Col xs="6" sm="4" style={{ padding: 0 }} key={res.id}>
               <Card style={{ margin: "0 10px" }}>
                 <div style={{ height: 393, overflow: "hidden" }}>
