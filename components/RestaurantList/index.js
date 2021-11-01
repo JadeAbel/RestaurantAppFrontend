@@ -35,13 +35,13 @@ function RestaurantList(props) {
   if (loading) return <h1>Fetching</h1>;
   if (data.restaurants && data.restaurants.length) {
     //searchQuery
-    const searchQuery = data.restaurants.filter((query) =>
-      query.name.toLowerCase().includes(props.search)
+    const visibleResaurants = data.restaurants.filter((restaurant) =>
+      restaurant.name.toLowerCase().includes(props.search)
     );
-    if (searchQuery.length != 0) {
+    if (visibleResaurants.length != 0) {
       return (
         <Row>
-          {searchQuery.map((res) => (
+          {visibleResaurants.map((res) => (
             <Col xs="6" sm="4" key={res.id}>
               <Card style={{ margin: "0 0.5rem 20px 0.5rem" }}>
                 <div style={{ height: 393, overflow: "hidden" }}>
