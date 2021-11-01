@@ -45,14 +45,7 @@ function RestaurantList(props) {
             <Col xs="6" sm="4" key={res.id}>
               <Card style={{ margin: "0 0.5rem 20px 0.5rem" }}>
                 <div style={{ height: 393, overflow: "hidden" }}>
-                  <CardImg
-                    top={true}
-                    src={
-                      process.env.NODE_ENV === "production"
-                        ? res.image[0].url
-                        : `${process.env.NEXT_PUBLIC_API_URL}${res.image[0].url}`
-                    }
-                  />
+                  <CardImg top={true} src={res.image[0].url} />
                 </div>
                 <CardBody>
                   <CardTitle>{res.name}</CardTitle>
