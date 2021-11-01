@@ -55,14 +55,7 @@ function Restaurants() {
             <Col xs="6" sm="4" style={{ padding: 0 }} key={res.id}>
               <Card style={{ margin: "0 10px" }}>
                 <div style={{ height: 393, overflow: "hidden" }}>
-                  <CardImg
-                    top={true}
-                    src={
-                      process.env.NODE_ENV === "production"
-                        ? res.image.url
-                        : `${process.env.NEXT_PUBLIC_API_URL}${res.image.url}`
-                    }
-                  />
+                  <CardImg top={true} src={res.image.url} />
                 </div>
                 <CardBody>
                   <CardTitle>{res.name}</CardTitle>
