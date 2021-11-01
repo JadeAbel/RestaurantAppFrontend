@@ -12,7 +12,7 @@ function Home() {
         <Col>
           <div className="search">
             <InputGroup>
-              <InputGroupAddon addonType="append"> Search </InputGroupAddon>
+              <InputGroupAddon addonType="append"> SEARCH </InputGroupAddon>
               <Input
                 onChange={(e) =>
                   updateQuery(e.target.value.toLocaleLowerCase())
