@@ -41,6 +41,7 @@ const GET_RESTAURANT_DISHES = gql`
 
 function Restaurants() {
   const appContext = useContext(AppContext);
+  const [searchTerm, setSearchterm] = useState("");
   const router = useRouter();
   const { loading, error, data } = useQuery(GET_RESTAURANT_DISHES, {
     variables: { id: router.query.id },
@@ -50,7 +51,6 @@ function Restaurants() {
   if (loading) return <h1>Loading ...</h1>;
   if (data.restaurant) {
     const { restaurant } = data;
-    const [searchTerm, setSearchterm] = useState("");
     const visibleDishes = restaurant.dishes.filter((dish) =>
       dish.name.toLowerCase().includes(searchTerm)
     );
