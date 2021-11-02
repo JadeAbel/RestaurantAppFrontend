@@ -14,14 +14,30 @@ import {
 } from "reactstrap";
 import { registerUser } from "../lib/auth";
 import AppContext from "../context/AppContext";
+import { render } from "react-dom";
 
 const Register = () => {
   const [data, setData] = useState({ email: "", username: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({});
+  const [userRegistrationStatus, setUserRegistrationStatus] =
+    useState("UNINITIALIZED");
   const appContext = useContext(AppContext);
-  return (
-    <Container>
+
+  const renderSuccessMessage = () => {
+    return <div>SUCCESS! THANKS FOR REGISTERING!</div>;
+  };
+
+  const renderErrorMessage = () => {
+    return (
+      <div>
+        WE'RE SORRY! THERE WAS AN ERROR WITH REGISTRATION. PLEASE TRY AGAIN
+      </div>
+    );
+  };
+
+  const renderRegistrationForm = () => {
+    return (
       <Row>
         <Col sm="12" md={{ size: 5, offset: 3 }}>
           <div className="paper">
@@ -99,10 +115,12 @@ const Register = () => {
                             // set authed user in global context object
                             appContext.setUser(res.data.user);
                             setLoading(false);
+                            setUserRegistrationStatus("SUCCESS");
                           })
                           .catch((error) => {
                             setError(error.response.data);
                             setLoading(false);
+                            setUserRegistrationStatus("ERROR");
                           });
                       }}
                     >
@@ -115,6 +133,22 @@ const Register = () => {
           </div>
         </Col>
       </Row>
+    );
+  };
+
+  const renderContent = () => {
+    if (userRegistrationStatus === "UNINITIALIZED") {
+      return renderRegistrationForm();
+    } else if (userRegistrationStatus === "SUCCESS") {
+      return renderSuccessMessage();
+    } else if (userRegistrationStatus === "ERROR") {
+      return renderErrorMessage();
+    }
+  };
+
+  return (
+    <Container>
+      {renderContent()}
       <style jsx>
         {`
           .paper {
