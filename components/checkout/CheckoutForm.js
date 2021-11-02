@@ -18,6 +18,9 @@ function CheckoutForm() {
     state: "",
     stripe_id: "",
   });
+
+  const [checkoutStatus, setCheckoutStatus] = useState("UNINITIALIZED");
+
   const [error, setError] = useState("");
   const stripe = useStripe();
   const elements = useElements();
@@ -56,6 +59,9 @@ function CheckoutForm() {
 
     if (!response.ok) {
       setError(response.statusText);
+      setCheckoutStatus("ERROR");
+    } else if (response.ok) {
+      setCheckoutStatus("SUCCESS");
     }
 
     // OTHER stripe methods you can use depending on app
@@ -73,29 +79,58 @@ function CheckoutForm() {
     // });
   }
 
+  const renderCheckoutForm = () => {
+    return (
+      <div className="paper">
+        <h5>Your information:</h5>
+        <hr />
+        <FormGroup style={{ display: "flex" }}>
+          <div style={{ flex: "0.90", marginRight: 10 }}>
+            <Label>Address</Label>
+            <Input name="address" onChange={onChange} />
+          </div>
+        </FormGroup>
+        <FormGroup style={{ display: "flex" }}>
+          <div style={{ flex: "0.65", marginRight: "6%" }}>
+            <Label>City</Label>
+            <Input name="city" onChange={onChange} />
+          </div>
+          <div style={{ flex: "0.25", marginRight: 0 }}>
+            <Label>State</Label>
+            <Input name="state" onChange={onChange} />
+          </div>
+        </FormGroup>
+
+        <CardSection
+          data={data}
+          stripeError={error}
+          submitOrder={submitOrder}
+        />
+      </div>
+    );
+  };
+
+  const renderSuccessMessage = () => {
+    return <div>YOUR ORDER HAS BEEN SUBMITTED</div>;
+  };
+
+  const renderErrorMessage = () => {
+    return <div>THERE WAS AN ERROR SUBMITTING YOUR ORDER</div>;
+  };
+
+  const renderContent = () => {
+    if (checkoutStatus === "UNINITIALIZED") {
+      return renderCheckoutForm();
+    } else if (checkoutStatus === "SUCCESS") {
+      return renderSuccessMessage();
+    } else if (checkoutStatus === "ERROR") {
+      renderErrorMessage();
+    }
+  };
+
   return (
-    <div className="paper">
-      <h5>Your information:</h5>
-      <hr />
-      <FormGroup style={{ display: "flex" }}>
-        <div style={{ flex: "0.90", marginRight: 10 }}>
-          <Label>Address</Label>
-          <Input name="address" onChange={onChange} />
-        </div>
-      </FormGroup>
-      <FormGroup style={{ display: "flex" }}>
-        <div style={{ flex: "0.65", marginRight: "6%" }}>
-          <Label>City</Label>
-          <Input name="city" onChange={onChange} />
-        </div>
-        <div style={{ flex: "0.25", marginRight: 0 }}>
-          <Label>State</Label>
-          <Input name="state" onChange={onChange} />
-        </div>
-      </FormGroup>
-
-      <CardSection data={data} stripeError={error} submitOrder={submitOrder} />
-
+    <div>
+      {renderContent()}
       <style jsx global>
         {`
           .paper {
